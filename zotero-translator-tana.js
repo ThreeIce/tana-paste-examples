@@ -49,7 +49,7 @@
       var library_id = item.libraryID ? item.libraryID : 0;
       var itemLink = 'zotero://select/items/' + library_id + '_' + item.key;
    
-      Zotero.write('  - Zotero link:: [Zotero Link](' + itemLink + ')\n');
+      Zotero.write('  - Zotero link:: [' + itemLink + '](' + itemLink + ')\n');
    
       // url with citation
       if (item.url) {
