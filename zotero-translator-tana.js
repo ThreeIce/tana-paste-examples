@@ -17,8 +17,10 @@
     while (item = Zotero.nextItem()) {
       // ref
       Zotero.write('- ' + item.title + ' #Reference\n');
-  
-      // author
+      
+      Zotero.write('  - Title:: ' + item.title + '\n');
+
+      // authors
       if (item.creators.length > 0) {
         Zotero.write('  - Authored by:: \n');
         // write authors as indented nodes
@@ -55,8 +57,48 @@
       }
       
       if (item.abstractNote) {
-        Zotero.write('  - Abstract:: '+ item.abstractNote + '\n');
+        Zotero.write('  - Abstract:: \n');
+        var lines = item.abstractNote.split(/\r?\n/);
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].trim().length > 0) {
+            Zotero.write('    - ' + lines[i] + '\n');
+          }
+        }
       }
+
+      // notes (暂时不可用,导入格式有问题)
+      // if (item.notes && item.notes.length > 0) {
+      //   for (var i = 0; i < item.notes.length; i++) {
+      //     var note = item.notes[i];
+      //     var noteContent = note.note || note;
+      //     var noteTitle = note.title || 'Note';
+          
+      //     // Basic HTML cleanup
+      //     var text = noteContent.replace(/<\/p>|<br\s*\/?>/gi, '\n');
+      //     text = text.replace(/<[^>]+>/g, '');
+      //     text = text.replace(/&nbsp;/g, ' ').replace(/</g, '<').replace(/>/g, '>').replace(/&/g, '&').replace(/"/g, '"');
+          
+      //     var lines = text.split(/\r?\n/);
+      //     var validLines = [];
+      //     for (var j=0; j<lines.length; j++) {
+      //        if (lines[j].trim().length > 0) validLines.push(lines[j]);
+      //     }
+          
+      //     if (validLines.length > 0) {
+      //        Zotero.write('  - ' + noteTitle + '\n');
+      //        for (var j=0; j<validLines.length; j++) {
+      //            var line = validLines[j];
+      //            var match = line.match(/^\s*[-*]\s+(.*)/);
+      //            if (match) {
+      //                Zotero.write('      - ' + match[1] + '\n');
+      //            } else {
+      //                Zotero.write('    - ' + line + '\n');
+      //            }
+      //        }
+      //     }
+      //   }
+      // }
+
     }
   }
   
