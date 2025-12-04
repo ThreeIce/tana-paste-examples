@@ -16,37 +16,47 @@
     var item;
     while (item = Zotero.nextItem()) {
       // ref
-      Zotero.write('- ' + item.title + ' #publication\n');
+      Zotero.write('- ' + item.title + ' #Reference\n');
   
       // author
-      Zotero.write('  - Authored by:: \n');
-      // write authors as indented nodes
-      for (author in item.creators){
-        Zotero.write('    - [[' + (item.creators[author].firstName||'') + ' ' + (item.creators[author].lastName||'') + ']]\n');
+      if (item.creators.length > 0) {
+        Zotero.write('  - Authored by:: \n');
+        // write authors as indented nodes
+        for (var i = 0; i < item.creators.length; i++) {
+          var creator = item.creators[i];
+          var name = creator.lastName;
+          if (creator.firstName) name = creator.firstName + ' ' + name;
+          Zotero.write('    - [[' + name + ' #Entity]]\n');
+        }
+        Zotero.write('\n');
       }
-      Zotero.write('\n');
    
       // year
       var date = Zotero.Utilities.strToDate(item.date);
-      var dateS = (date.year) ? date.year : item.date;   
-      Zotero.write('  - Year:: ')
-      Zotero.write((dateS||'') + '\n')
+      var dateS = (date.year) ? date.year : item.date;
+      if (dateS) {
+        Zotero.write('  - Year:: ' + dateS + '\n');
+      }
       
       // publication
-      Zotero.write('  - Publication:: ')
-      Zotero.write((item.publicationTitle ||'')+ '\n')
+      if (item.publicationTitle) {
+        Zotero.write('  - Publication:: [[' + item.publicationTitle + ' #Publication]]\n');
+      }
    
       // zotero link
-      var library_id = item.libraryID ? item.libraryID : 0;  
+      var library_id = item.libraryID ? item.libraryID : 0;
       var itemLink = 'zotero://select/items/' + library_id + '_' + item.key;
    
-      Zotero.write('  - Zotero link:: ')
-      Zotero.write('[Zotero Link](' + itemLink + ')\n')
+      Zotero.write('  - Zotero link:: [Zotero Link](' + itemLink + ')\n');
    
       // url with citation
-      Zotero.write('  - URL:: ' + (item.url||'') + '\n')
+      if (item.url) {
+        Zotero.write('  - URL:: ' + '[' + item.url + '](' + item.url + ')\n');
+      }
       
-      Zotero.write('  - Abstract:: '+  (item.abstractNote || '')+ '\n')
+      if (item.abstractNote) {
+        Zotero.write('  - Abstract:: '+ item.abstractNote + '\n');
+      }
     }
   }
   
